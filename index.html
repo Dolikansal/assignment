@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aashiyaana - Premium Luxury Stays</title>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Ensures Tailwind looks for the 'dark' class on the HTML tag
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#4F46E5', // For Indigo
+                        'accent-teal': '#22D3EE', // For Cyan
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+    
+    <script>
+    
+        // 2. JS for Service Modal (Section 3)
+        function openServiceModal(service) {
+            const modal = document.getElementById('service-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            let content = '';
+            if (service === 'food') {
+                content = '<h3 class="text-2xl font-bold mb-3">Gourmet Food Service</h3><p>Enjoy our 24/7 in-room dining experience featuring exquisite local and international cuisine. Our chefs use only the freshest ingredients. Pre-booking is available for personalized dining experiences and special dietary needs.</p>';
+            } else if (service === 'laundry') {
+                content = '<h3 class="2xl font-bold mb-3">Express Laundry & Dry Cleaning</h3><p>Same-day laundry and dry-cleaning services are available. Place your request with concierge before 10 AM for guaranteed evening delivery. Ironing service included.</p>';
+            } else if (service === 'staff') {
+                content = '<h3 class="2xl font-bold mb-3">Dedicated Staff Management</h3><p>Our highly trained hospitality staff is available around the clock to ensure your stay is flawless. Personalized service is our priority.</p>';
+            } else if (service === 'checkin') {
+                content = '<h3 class="2xl font-bold mb-3">24/7 Seamless Check-in/out</h3><p>We offer secure, non-contact check-in and check-out at any time of the day or night through our digitized system. Luggage assistance is always available. Early check-in and late check-out requests are subject to availability.</p>';
+            }
+            
+            modalContent.innerHTML = content;
+            modal.classList.remove('hidden');
+        }
+
+        function closeServiceModal() {
+            document.getElementById('service-modal').classList.add('hidden');
+        }
+
+        // 3. JS for Sorting Rooms (Section 3) - Placeholder Logic
+        function sortRooms() {
+            const container = document.getElementById('room-cards-container');
+            let rooms = Array.from(container.children);
+            const sortByPrice = document.getElementById('sort-price').value;
+            const sortByRating = document.getElementById('sort-rating').value;
+
+            if (sortByPrice) {
+                rooms.sort((a, b) => {
+                    const priceA = parseInt(a.getAttribute('data-price'));
+                    const priceB = parseInt(b.getAttribute('data-price'));
+                    return sortByPrice === 'low-to-high' ? priceA - priceB : priceB - priceA;
+                });
+            } else if (sortByRating === 'highest') {
+                 rooms.sort((a, b) => {
+                    const ratingA = parseFloat(a.getAttribute('data-rating'));
+                    const ratingB = parseFloat(b.getAttribute('data-rating'));
+                    return ratingB - ratingA; // Highest rating first
+                });
+            }
+            
+            // Re-append sorted rooms
+            container.innerHTML = '';
+            rooms.forEach(room => container.appendChild(room));
+            console.log("Rooms Sorted! (Requires Live Server for visual check)");
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-500">
+  <div id="service-modal" class="hidden fixed inset-0 z-[100] bg-black bg-opacity-75 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-lg">
+            <div class="flex justify-between items-start border-b pb-3 mb-4">
+                <h2 class="text-2xl font-bold text-indigo-600 dark:text-cyan-400">Service Details</h2>
+                <button onclick="closeServiceModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modal-content" class="text-gray-700 dark:text-gray-300 space-y-3">
+                </div>
+        </div>
+    </div>
+
+
+    <!-- navbar  -->
+
+    <nav class="fixed top-0 w-full z-50 bg-white dark:bg-gray-900 shadow-xl transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-3xl font-extrabold tracking-wider text-indigo-600 dark:text-cyan-400">Aashiyaana</a>
+                </div>
+    
+                <div class="hidden md:flex md:items-center space-x-6">
+                    <a href="#home" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-cyan-400 transition duration-150 font-medium">Home</a>
+                    <a href="#services" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-cyan-400 transition duration-150 font-medium">Services</a>
+                    <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-cyan-400 transition duration-150 font-medium">About Us</a>
+                    <a href="#contact" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-cyan-400 transition duration-150 font-medium">Contact Us</a>
+                    
+                    <a href="#" class="px-5 py-2 font-semibold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 transition duration-150 shadow-lg hover:shadow-xl">Book Now</a>
+                    
+                </div>
+    
+                <div class="flex md:hidden items-center space-x-3">
+                     <button onclick="toggleDarkMode()" class="p-2 rounded-full text-gray-500 dark:text-cyan-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition duration-150 focus:outline-none">
+                        <svg class="w-6 h-6 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg class="w-6 h-6 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                    <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" id="hamb-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                        <svg class="hidden h-6 w-6" id="hamb-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50 dark:bg-gray-800">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700">Home</a>
+                <a href="#services" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700">Services</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700">About Us</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-indigo-50 dark:hover:bg-gray-700">Contact Us</a>
+                <a href="#" class="block w-full text-center mt-2 px-4 py-2 text-base font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">Book Now</a>
+            </div>
+        </div>
+        
+        <script>
+            document.getElementById('mobile-menu-button').addEventListener('click', function() {
+                const menu = document.getElementById('mobile-menu');
+                const menuOpen = menu.classList.contains('hidden');
+                
+                menu.classList.toggle('hidden', !menuOpen);
+                document.getElementById('hamb-open').classList.toggle('hidden', menuOpen);
+                document.getElementById('hamb-close').classList.toggle('hidden', !menuOpen);
+            });
+        </script>
+    </nav>
+
+    <!-- Hero section -->
+    <header id="home" class="relative pt-16 min-h-screen flex items-center justify-center">
+        <div class="absolute inset-0">
+            <img src="https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="Luxurious hotel room interior" class="w-full h-full object-cover">
+            
+            <div class="absolute inset-0 bg-black opacity-40 dark:opacity-60 transition duration-300"></div>
+        </div>
+        
+        <div class="relative z-10 text-center px-4 py-16 lg:py-0">
+            <h1 class="text-4xl sm:text-5xl lg:text-7xl font-extrabold tracking-tight text-white mb-4 drop-shadow-lg">
+                Find Your Peaceful Retreat at Aashiyaana
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto drop-shadow-md">
+                Experience comfort, luxury, and unmatched hospitality. Your perfect escape starts here.
+            </p>
+            
+            <div class="flex justify-center space-x-4 mb-8">
+                <a href="#services" class="px-8 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-full hover:bg-indigo-700 shadow-xl transition duration-300 transform hover:scale-105">
+                    Explore Our Services
+                </a>
+            </div>
+            
+            <div class="flex items-center justify-center space-x-2 text-white drop-shadow-md">
+                <div class="flex text-cyan-400">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg>
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg>
+                </div>
+                <span class="text-base font-medium">4.9/5 based on 500+ reviews</span>
+            </div>
+        </div>
+    </header>
+    <!-- service -->
+    <section id="services" class="py-16 sm:py-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <p class="text-indigo-600 dark:text-cyan-400 font-semibold uppercase tracking-wider">Our Rooms & Services</p>
+                <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">Choose Your Perfect Aashiyaana Stay</h2>
+            </div>
+    
+            <div class="flex flex-col sm:flex-row justify-end items-center space-y-3 sm:space-y-0 sm:space-x-4 mb-10">
+                <span class="text-base font-medium text-gray-700 dark:text-gray-300">Filter & Sort:</span>
+                
+                <select id="sort-price" onchange="sortRooms()" class="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    <option value="">Sort By Price</option>
+                    <option value="low-to-high">Price: Low to High</option>
+                    <option value="high-to-low">Price: High to Low</option>
+                </select>
+                
+                <select id="sort-rating" onchange="sortRooms()" class="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                    <option value="">Sort By Rating</option>
+                    <option value="highest">Highest Rated</option>
+                </select>
+            </div>
+    
+            <div id="room-cards-container-parent" class="overflow-x-scroll pb-4 scroll-smooth">
+                <div id="room-cards-container" class="flex flex-row space-x-6 min-w-max">
+                    
+                    <div data-price="250" data-rating="4.9" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-indigo-200 dark:border-indigo-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Pro Suite" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Pro Luxury Suite</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Ultimate luxury, private balcony, and personalized concierge.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$250<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.9/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book Pro</a>
+                        </div>
+                    </div>
+    
+                    <div data-price="120" data-rating="4.7" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=600" alt="High Comfort" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">High Comfort Room</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Premium bedding, smart TV, and expanded room amenities.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$120<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.7/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book High</a>
+                        </div>
+                    </div>
+    
+                    <div data-price="50" data-rating="4.2" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Low Budget" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Low Budget Standard</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Clean, essential amenities, perfect for short stays.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$50<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.2/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book Low</a>
+                        </div>
+                    </div>
+                    
+                    <div data-price="135" data-rating="4.8" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/1918291/pexels-photo-1918291.jpeg?auto=compress&cs=tinysrgb&w=600" alt="High Balcony" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">High Balcony View</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Spacious room with a private scenic view balcony.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$135<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.8/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book Now</a>
+                        </div>
+                    </div>
+                    
+    
+                    <div data-price="300" data-rating="5.0" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-indigo-200 dark:border-indigo-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Presidential" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Presidential Suite</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">The best of Aashiyaana. Separate living and dining areas.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$300<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">5.0/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book Pro</a>
+                        </div>
+                    </div>
+                     <div data-price="105" data-rating="4.6" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/271775/pexels-photo-271775.jpeg?auto=compress&cs=tinysrgb&w=600" alt="High View" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">High City View</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Great views, work desk, and fast Wi-Fi.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$105<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.6/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book High</a>
+                        </div>
+                    </div>
+                    <div data-price="60" data-rating="4.3" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/271775/pexels-photo-271775.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Budget Single" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Low Single Bed</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Cozy single occupancy room.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$60<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.3/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book Low</a>
+                        </div>
+                    </div>
+                    <div data-price="150" data-rating="4.7" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/1743231/pexels-photo-1743231.jpeg?auto=compress&cs=tinysrgb&w=600" alt="High Deluxe" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">High Deluxe Double</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Spacious room for two with a seating area.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$150<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.7/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book High</a>
+                        </div>
+                    </div>
+                     <div data-price="45" data-rating="4.1" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/271775/pexels-photo-271775.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Low Essential" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Low Essential Stay</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Basic, clean, and best value for money.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$45<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.1/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book Low</a>
+                        </div>
+                    </div>
+                     <div data-price="270" data-rating="4.9" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-indigo-200 dark:border-indigo-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/1579739/pexels-photo-1579739.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Pro Family" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Pro Family Suite</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Two bedrooms, perfect for family comfort.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$270<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.9/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book Pro</a>
+                        </div>
+                    </div>
+                     <div data-price="110" data-rating="4.5" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/271775/pexels-photo-271775.jpeg?auto=compress&cs=tinysrgb&w=600" alt="High Standard" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">High Standard Double</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Comfort and quality for extended stays.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$110<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.5/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book High</a>
+                        </div>
+                    </div>
+                     <div data-price="55" data-rating="4.2" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/271775/pexels-photo-271775.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Low View" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Low Street View</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Clean room with a pleasant street view.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$55<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.2/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book Low</a>
+                        </div>
+                    </div>
+                     <div data-price="290" data-rating="4.8" class="w-72 flex-shrink-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-indigo-200 dark:border-indigo-700 transition duration-300 hover:shadow-xl">
+                        <img src="https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Pro Premium" class="h-44 w-full object-cover">
+                        <div class="p-5">
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Pro Premium Suite</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-3 text-sm">Enhanced luxury and dedicated workspace.</p>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-extrabold text-indigo-600 dark:text-cyan-400">$290<span class="text-base font-normal text-gray-500 dark:text-gray-400">/night</span></span>
+                                <div class="flex items-center text-yellow-500">4.8/5</div>
+                            </div>
+                            <a href="#" class="block w-full text-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150">Book Pro</a>
+                        </div>
+                    </div>
+                    </div>
+    
+    
+                </div>
+            </div>
+    
+            <div class="mt-16 text-center">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Included Premium Services (Click to View Details)</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    
+                    <div onclick="openServiceModal('food')" class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition duration-300 transform hover:scale-105">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center text-indigo-600 dark:text-cyan-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <p class="font-semibold text-gray-900 dark:text-white">Gourmet Food Service</p>
+                    </div>
+                    
+                    <div onclick="openServiceModal('laundry')" class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition duration-300 transform hover:scale-105">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center text-indigo-600 dark:text-cyan-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 11V18a2 2 0 002 2h8a2 2 0 002-2v-1l3-11H3zM5.5 10L12 12m0 0l6.5-2M12 12V4m0 0h2.5m-5 0h2.5"></path></svg>
+                        </div>
+                        <p class="font-semibold text-gray-900 dark:text-white">On-Site Laundry</p>
+                    </div>
+                    
+                    <div onclick="openServiceModal('staff')" class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition duration-300 transform hover:scale-105">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center text-indigo-600 dark:text-cyan-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-4M7 20h4m-4 0v-4m4 4v-4m-4-4a4 4 0 118 0m-8 0a4 4 0 108 0M7 16a4 4 0 108 0M7 16h8"></path></svg>
+                        </div>
+                        <p class="font-semibold text-gray-900 dark:text-white">Dedicated Staff</p>
+                    </div>
+                    
+                    <div onclick="openServiceModal('checkin')" class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-xl transition duration-300 transform hover:scale-105">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center text-indigo-600 dark:text-cyan-400">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <p class="font-semibold text-gray-900 dark:text-white">24/7 Check-in/out</p>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- contact -->
+    <section id="contact" class="py-16 sm:py-24 transition-colors duration-300 bg-white dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="mt-2 text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white">Get in Touch with Aashiyaana</h2>
+                <p class="text-lg text-gray-600 dark:text-gray-400 mt-3">We'd love to hear your feedback or assist with your booking.</p>
+            </div>
+    
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-gray-50 dark:bg-gray-900 p-8 sm:p-12 rounded-2xl shadow-2xl">
+                
+                <div>
+                    <h3 class="text-3xl font-bold text-indigo-600 dark:text-cyan-400 mb-6">Send Us a Message</h3>
+                    <form action="#" method="POST" class="space-y-6">
+                        <div>
+                            <label for="contact-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name *</label>
+                            <input type="text" name="contact-name" id="contact-name" required class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-700 dark:text-white placeholder-gray-400" placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label for="contact-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address *</label>
+                            <input type="email" name="contact-email" id="contact-email" required class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-700 dark:text-white placeholder-gray-400" placeholder="you@example.com">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rate Your Experience (Optional)</label>
+                            <div class="flex space-x-1 text-cyan-400">
+                                <input type="radio" id="rstar5" name="rating" value="5" class="hidden">
+                                <label for="rstar5" class="cursor-pointer hover:text-yellow-500 transition duration-150"><svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg></label>
+                                <input type="radio" id="rstar4" name="rating" value="4" class="hidden">
+                                <label for="rstar4" class="cursor-pointer hover:text-yellow-500 transition duration-150"><svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg></label>
+                                <input type="radio" id="rstar3" name="rating" value="3" class="hidden">
+                                <label for="rstar3" class="cursor-pointer hover:text-yellow-500 transition duration-150"><svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg></label>
+                                <input type="radio" id="rstar2" name="rating" value="2" class="hidden">
+                                <label for="rstar2" class="cursor-pointer hover:text-yellow-500 transition duration-150"><svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg></label>
+                                <input type="radio" id="rstar1" name="rating" value="1" class="hidden">
+                                <label for="rstar1" class="cursor-pointer hover:text-yellow-500 transition duration-150"><svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24 14.81 8.63 12 2 9.19 8.63 2 9.24 7.46 13.97 5.82 21z"/></svg></label>
+                            </div>
+                        </div>
+    
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
+                            <textarea name="message" id="message" rows="4" class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white dark:bg-gray-700 dark:text-white placeholder-gray-400" placeholder="Tell us how we can help or how your stay was..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full flex justify-center py-3 px-4 rounded-lg shadow-lg text-lg font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+    
+                <div class="space-y-8 lg:mt-0 p-4 rounded-xl bg-gray-100 dark:bg-gray-700">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">About Aashiyaana</h3>
+                        <p class="text-gray-600 dark:text-gray-300">
+                            Aashiyaana is your premier choice for luxury and comfortable stays. We are dedicated to providing a serene and welcoming atmosphere with world-class service.
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <h4 class="text-xl font-semibold text-gray-900 dark:text-white">Contact Details</h4>
+                        <p class="text-gray-600 dark:text-gray-300 flex items-center space-x-3">
+                            <svg class="w-6 h-6 text-indigo-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-2-5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2z"></path></svg>
+                            <span>hello@aashiyaana.com</span>
+                        </p>
+                        <p class="text-gray-600 dark:text-gray-300 flex items-center space-x-3">
+                            <svg class="w-6 h-6 text-indigo-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.14a11.042 11.042 0 005.516 5.516l1.14-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-4.28c-4.383 0-8.528-1.928-11.393-5.334A17.942 17.942 0 013 9.428V5z"></path></svg>
+                            <span>+91 98765 43210</span>
+                        </p>
+                        <p class="text-gray-600 dark:text-gray-300 flex items-center space-x-3">
+                            <svg class="w-6 h-6 text-indigo-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            <span>Luxury Complex, Delhi NCR</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="bg-gray-900 dark:bg-black text-gray-300 dark:text-gray-400 pt-16 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 pb-10 border-b border-gray-700 dark:border-gray-800">
+                <div class="col-span-2 md:col-span-2 lg:col-span-1">
+                    <h3 class="text-4xl font-extrabold tracking-wider text-indigo-400">Aashiyaana</h3>
+                    <p class="mt-4 text-sm text-gray-400 max-w-xs">Crafting unforgettable luxury stay experiences since 2020.</p>
+                </div>
+    
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-5">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#home" class="hover:text-cyan-400 transition duration-150">Home</a></li>
+                        <li><a href="#services" class="hover:text-cyan-400 transition duration-150">Our Rooms</a></li>
+                        <li><a href="#about" class="hover:text-cyan-400 transition duration-150">About Company</a></li>
+                        <li><a href="#contact" class="hover:text-cyan-400 transition duration-150">Contact & Support</a></li>
+                    </ul>
+                </div>
+    
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-5">Resources</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="hover:text-cyan-400 transition duration-150">FAQ</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition duration-150">Careers</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition duration-150">Check-in Policy</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition duration-150">Sitemap</a></li>
+                    </ul>
+                </div>
+    
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-5">Legal</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="hover:text-cyan-400 transition duration-150">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition duration-150">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-cyan-400 transition duration-150">Cookie Settings</a></li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="flex flex-col md:flex-row justify-between items-center py-6 text-sm">
+                
+                <p class="order-2 md:order-1 mt-4 md:mt-0 text-gray-500">
+                    &copy; 2025 Aashiyaana. All rights reserved.
+                </p>
+    
+                <div class="flex space-x-6 order-1 md:order-2">
+                     <a href="#" class="text-gray-400 hover:text-cyan-400 transition duration-150">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.04C6.54 2.04 2.04 6.54 2.04 12c0 5.08 3.75 9.3 8.65 9.92V14.1H7.45v-2.06h3.24V9.58c0-3.23 1.95-4.99 4.84-4.99 1.39 0 2.59.25 2.94.36v3.39h-2.02c-1.58 0-1.89.76-1.89 1.87v2.44h3.76l-.61 3.24h-3.15v7.83c4.9-.62 8.65-4.84 8.65-9.92 0-5.46-4.5-9.96-9.96-9.96z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition duration-150">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.78-10.42c-.28-1.55-1.52-2.79-3.07-3.07C12.56 6.36 12.33 6.33 12 6.33s-.56.03-.71.06c-1.55.28-2.79 1.52-3.07 3.07-.03.15-.06.37-.06.71s.03.56.06.71c.28 1.55 1.52 2.79 3.07 3.07.15.03.37.06.71.06s.56-.03.71-.06c1.55-.28 2.79-1.52 3.07-3.07.03-.15.06-.37.06-.71s-.03-.56-.06-.71zm-2.05 1.48c-.28.28-.73.28-1.01 0-.28-.28-.28-.73 0-1.01.28-.28.73-.28 1.01 0 .28.28.28.73 0 1.01zM14 10.5c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition duration-150">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8 8H5v9h3V8zm5 0h-3v9h3v-4.5c0-1.25.1-2.26 1.44-2.26C14.77 10.24 15 11.23 15 12.5V17h3v-4.72c0-2.49-1.35-3.52-3.5-3.52z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition duration-150">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.9 4.3c.6 0 1.1.2 1.5.5s.7.8.8 1.4c0 .6-.2 1.1-.5 1.5s-.8.7-1.3.8c.6.1 1.1-.1 1.5-.4s.6-.6.8-1.1c-.2.1-.4.2-.6.3-.2.1-.4.1-.6.1-.8-.8-2.1-1.2-3.4-1.2-2.3 0-4.2 1.6-4.9 3.8-.4 1.1-.6 2.3-.6 3.5 0 2.1.6 4.1 1.8 5.8-1.2.6-2.5.9-3.9.9-1.2 0-2.4-.3-3.4-.9.2.1.4.2.6.2.8.1 1.6 0 2.3-.3-1.4-.4-2.5-1.4-2.9-2.7-.2 0-.4-.1-.6-.1-.2 0-.4 0-.5.1.2.1.4.2.6.3.8.3 1.6.4 2.5.4-1.8 1.7-4.4 2.7-7.2 2.7-1.1 0-2.1-.2-3.1-.6 1.4 1.2 3 1.9 4.7 2.1C5.7 18.2 3.6 18.7 1 18.7c-1.4 0-2.6-.2-3.8-.6 1.9 2.7 5.1 4.5 8.7 4.5 5.2 0 9.1-3.6 11.2-8.3.1-.2.2-.5.2-.7-.1-.1-.3-.2-.4-.3z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
+
